@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const User = require('../models/user.model');
 const admin = require('../config/firebase.config')
 const { isValidPassword } = require('../utilities/password-validator');
@@ -6,6 +8,12 @@ const { isValidPassword } = require('../utilities/password-validator');
 const userRegister = async (req, res) => {
   try {
     const { name,avatar, email, password,cPassword } = req.body;
+    if(!name || !email || !password || !cPassword){
+       return res.status(400).send({ 
+        message: "Please complete required field!",
+        success : false
+       });
+    }
     const isExist = await User.findOne({ email });
     if (isExist) {
     return res.status(400).send({ 
@@ -13,7 +21,7 @@ const userRegister = async (req, res) => {
          success : false
        });
     } 
-    if(password === cPassword){
+    if(password !== cPassword){
         return res.status(400).send({
         message: "Password is not match!",
         success : false
@@ -28,6 +36,7 @@ const userRegister = async (req, res) => {
     }
     
       const hash = await bcrypt.hash(password, 10);
+      console.log(hash)
       const newUser = new User({
         name,
         email,
@@ -47,19 +56,20 @@ const userRegister = async (req, res) => {
     });
   }
 };
+
 // login user : email and password
 const userLogin = async (req, res) => {
   const { email, password } = req.body;
   
     try {
-        const isExist = await User.findOne({ email });
+      const isExist = await User.findOne({ email });
     if (!isExist) {
       return res.status(404).send({
         message: "Invalid email",
         success : false
       });
     }
-
+     
     const existedUser = await bcrypt.compare(password, isExist.password);
     if (!existedUser) {
       return res.status(401).send({ 
@@ -67,6 +77,7 @@ const userLogin = async (req, res) => {
         success : false
       });
     }
+     
     const accessToken = jwt.sign(
       {
         id: isExist._id, email : isExist.email
@@ -74,7 +85,7 @@ const userLogin = async (req, res) => {
       process.env.JWT_ACCESS_TOEKN,
       { expiresIn: "30m" }
     );
-    
+    console.log(accessToken)
     res.cookie("accesstoken", accessToken, {
       httpOnly: true,
       secure: false,
