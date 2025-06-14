@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const UserSchema = new mongoose.Schema({
      avatar : {
           type : String,
-          default : 'https://i.ibb.co/nN9dfh5f/user-icon-illustration-for-graphic-design-logo-web-site-social-media-mobile-app-ui-png.png'
+          default : 'https://i.ibb.co/hRGTZWdX/download.jpg'
      },
      name :{
           type : String,
