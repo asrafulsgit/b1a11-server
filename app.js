@@ -1,20 +1,26 @@
 const express = require('express');
 const cors = require('cors')
+const cookieParser = require('cookie-parser')
 const userRouter = require('./routes/user.route');
-const tipsRouter = require('./routes/tips.route');
-const gardernerRoute = require('./routes/gardener.route');
-const app = express()
+const bookEventRouter = require('./routes/bookEvent.route');
+const eventRouter = require('./routes/event.route');
+const myBookingRouter = require('./routes/myBooking.route');
 
-app.use(express.json())
-app.use(express.urlencoded({extended : true}))
+const app = express();
+app.use(express.json());
+app.use(express.urlencoded({extended : true}));
+app.use(cookieParser());
+
 app.use(cors({
-     origin : process.env.FRONTEND_URL
-}))
+     origin : process.env.FRONTEND_URL,
+     credentials : true
+}));
 
 
-app.use('/api/v1', userRouter)
-app.use('/api/v1', tipsRouter)
-app.use('/api/v1', gardernerRoute)
+app.use('/api/v1',  userRouter);
+app.use('/api/v1',  eventRouter);
+app.use('/api/v1',  myBookingRouter);
+app.use('/api/v1',  bookEventRouter);
 
 
 
