@@ -1,4 +1,5 @@
 const User = require('../models/user.model');
+const admin = require('../config/firebase.config')
 const { isValidPassword } = require('../utilities/password-validator');
 
 // register user
@@ -94,9 +95,79 @@ const userLogin = async (req, res) => {
 };
 
 // login user : google
+const googleLogin = async (req, res) => {
+  const { token } = req.body;
+
+  try {
+    const decoded = await admin.auth().verifyIdToken(token);
+    const { email, name, picture } = decoded;
+
+    let user = await User.findOne({ email });
+    if (!user) {
+      user = new User({
+        name,
+        email,
+        avatar: picture,
+        google: true,
+      });
+      await user.save();
+    }
+    
+    const accessToken = jwt.sign(
+          {
+            id: user._id,  email : user.email
+          },
+          process.env.JWT_ACCESS_TOEKN,
+          { expiresIn: "30m" }
+        );
+    
+        res.cookie("accesstoken", accessToken, {
+          httpOnly: true,
+          secure: false,
+          sameSite: "Strict",
+          maxAge: 1000 * 60 * 30,
+        });
+    
+        return res.status(200).send({
+          message: "Logged in successfully",
+          success: true,
+        })
+  } catch (err) { 
+    return res.status(401).json({ 
+        message: "Invalid Google token",
+        success : false 
+    });
+  }
+
+}
+
+// logout user
+const userLogout = async (req, res) => {
+  try {
+    res.clearCookie("accesstoken", {
+      httpOnly: true,
+      secure: false,
+      sameSite: "Strict",
+    });
+    
+    return res.status(200).send({
+      message: "user logout successful",
+      success: true,
+    });
+  } catch (error) {
+    return res.status(500).send({
+      message: "somthing broke!",
+      success: false,
+    });
+  }
+};
+
+
 
 
 module.exports={
      userRegister,
-     userLogin
+     userLogin,
+     googleLogin,
+     userLogout
 }
