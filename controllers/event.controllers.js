@@ -84,7 +84,7 @@ const createEvent = async (req, res) => {
   }
 };
 // event details
-const EventDetails = async (req, res) => {
+const eventDetails = async (req, res) => {
   const { id } = req.params;
   try {
     if (!id) {
@@ -321,7 +321,7 @@ module.exports = {
   updateEvent,
   deleteEvent,
   browseEvent,
-  EventDetails,
+  eventDetails,
   featuredEvents,
   myEvents,
 };

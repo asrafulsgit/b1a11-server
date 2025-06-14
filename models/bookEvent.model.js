@@ -18,5 +18,5 @@ const BookEventsSchema = new mongoose.Schema({
 
 BookEventsSchema.index({ userEmail: 1, event: 1 }, { unique: true });
 
-const BookEvent = mongoose.model('MyBooking', BookEventsSchema);
+const BookEvent = mongoose.model('BookEvent', BookEventsSchema);
 module.exports = BookEvent ;
