@@ -85,7 +85,6 @@ const userLogin = async (req, res) => {
       process.env.JWT_ACCESS_TOEKN,
       { expiresIn: "30m" }
     );
-    console.log(accessToken)
     res.cookie("accesstoken", accessToken, {
       httpOnly: true,
       secure: false,
