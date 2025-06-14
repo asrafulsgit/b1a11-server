@@ -109,6 +109,7 @@ const EventDetails = async (req, res) => {
 };
 // Updae event
 const updateEvent = async (req, res) => {
+  const {email} = req.user;
   const {
     name,
     type,
@@ -138,6 +139,12 @@ const updateEvent = async (req, res) => {
   ) {
     return res.status(400).send({
       message: "All fields are required.",
+      success: false,
+    });
+  }
+  if(organizer.email === email){
+    return res.status(400).send({
+      message: "Unauth user.",
       success: false,
     });
   }
@@ -284,7 +291,7 @@ const deleteEvent = async (req, res) => {
 
 // my events organized by me
 const myEvents = async (req, res) => {
-  const { email } = req.query;
+  const { email } = req.user;
   try {
     if (!email) {
       return res.status(400).send({
