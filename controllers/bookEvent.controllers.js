@@ -1,7 +1,7 @@
-const MyBooking = require('../models/myBooking.model');
+const BookEvent = require('../models/bookEvent.model');
 
-// create booking
-const createBooking = async (req, res) => {
+// create book event
+const createBookEvent = async (req, res) => {
   const {id} = req.params;
   const {email} = req.user;
   try {
@@ -11,24 +11,24 @@ const createBooking = async (req, res) => {
         message: 'email and id are required.'
       });
     }
-    const isBooked = await MyBooking.findOne({event : id, userEmail : email})
+    const isBooked = await BookEvent.findOne({event : id, userEmail : email})
     if(isBooked){
     return res.status(400).send({
-        message: "You have already booked this Event!",
+        message: "Event is booked!",
         success : false
       });
     }
-    const newBooking = new MyBooking({
+    const newBookEvent = new BookEvent({
       userEmail : email,
       event : id
     });
 
-    const savedBooking = await newBooking.save();
+    const savedBookEvent = await newBookEvent.save();
 
     return res.status(201).json({
       success: true,
-      message: 'Booking created successfully',
-      event: savedBooking
+      message: 'Book event created successfully',
+      event: savedBookEvent
     });
 
   } catch (error) {
@@ -41,7 +41,7 @@ const createBooking = async (req, res) => {
 };
 
 // my bookings
-const myBookings = async (req, res) => {
+const myBookEvents = async (req, res) => {
   const { email } = req.user;
   try {
     if (!email) {
@@ -50,12 +50,12 @@ const myBookings = async (req, res) => {
         success: false,
       });
     }
-    const bookings = await MyBooking.find({ userEmail : email }).sort({
+    const bookEvents = await BookEvent.find({ userEmail : email }).sort({
       createdAt: -1,
     });
     return res.status(200).send({
-      message: "my bookings fetched",
-      events : bookings,
+      message: "my book events fetched",
+      events : bookEvents,
       success: false,
     });
   } catch (error) {
@@ -67,8 +67,8 @@ const myBookings = async (req, res) => {
   }
 };
 
-// cencel bookings
-const cencelBooking = async (req, res) => {
+// delete book event
+const deleteBookEvent = async (req, res) => {
    const {email} = req.user;
    const {id}= req.params;
   try {
@@ -79,10 +79,10 @@ const cencelBooking = async (req, res) => {
       });
     }
 
-    await MyBooking.findOneAndDelete({event : id, userEmail : email});
+    await BookEvent.findOneAndDelete({event : id, userEmail : email});
 
     return res.status(200).send({
-      message: "Booking cenceled",
+      message: "Book event deleted",
       success: true,
     });
   } catch (error) {
@@ -98,9 +98,9 @@ const cencelBooking = async (req, res) => {
 
 
 module.exports = { 
-    createBooking,
-    myBookings,
-    cencelBooking
+    createBookEvent,
+    myBookEvents,
+    deleteBookEvent
 };
 
 

@@ -8,10 +8,10 @@ const userRegister = async (req, res) => {
     const { name,avatar, email, password,cPassword } = req.body;
     const isExist = await User.findOne({ email });
     if (isExist) {
-    return res.status(400).send({errors : [{
+    return res.status(400).send({ 
         message: "email is already exist!",
-        field: "email",
-      }]});
+         success : false
+       });
     } 
     if(password === cPassword){
         return res.status(400).send({
