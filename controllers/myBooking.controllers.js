@@ -3,7 +3,7 @@ const MyBooking = require('../models/myBooking.model');
 // create booking
 const createBooking = async (req, res) => {
   const {id} = req.params;
-  const {email} = req.user;
+  const {email,phone}= req.body;
   try {
     if (!email || !id) {
       return res.status(400).json({
@@ -20,7 +20,8 @@ const createBooking = async (req, res) => {
     }
     const newBooking = new MyBooking({
       userEmail : email,
-      event : id
+      event : id,
+      phone
     });
 
     const savedBooking = await newBooking.save();
@@ -50,9 +51,10 @@ const myBookings = async (req, res) => {
         success: false,
       });
     }
-    const bookings = await MyBooking.find({ userEmail : email }).sort({
+    const bookings = await MyBooking.find({ userEmail : email }).populate('event').sort({
       createdAt: -1,
     });
+    
     return res.status(200).send({
       message: "my bookings fetched",
       events : bookings,
