@@ -34,20 +34,19 @@ const createEvent = async (req, res) => {
     participants,
     requirements,
     organizer,
-  } = req.body;
-  console.log(req.body)
+  } = req.body; 
   try {
     if (
-      !name ||
+      !name.trim() ||
       !type ||
-      !description ||
+      !description.trim() ||
       !image ||
       !date ||
       !location ||
       !time ||
       !fee ||
-      !organizer?.email ||
-      !organizer?.name
+      !organizer?.email.trim() ||
+      !organizer?.name.trim()
     ) {
       return res.status(400).send({
         message: "All fields are required.",
@@ -121,29 +120,28 @@ const updateEvent = async (req, res) => {
     participants,
     requirements,
     organizer,
-  } = req.body?.formData;
-
+  } = req.body;
   if (
-    !title ||
     !type ||
-    !name ||
-    !description ||
+    !name.trim() ||
+    !description.trim() ||
     !image ||
     !date ||
-    !location ||
+    !location.trim() ||
     !time ||
     !fee ||
-    !organizer?.email ||
-    !organizer?.name
+    !organizer?.email.trim() ||
+    !organizer?.name.trim()
   ) {
     return res.status(400).send({
       message: "All fields are required.",
       success: false,
     });
   }
-  if(organizer.email === email){
+  
+  if(organizer.email !== email){
     return res.status(400).send({
-      message: "Unauth user.",
+      message: "Unauth user!",
       success: false,
     });
   }
@@ -170,8 +168,7 @@ const updateEvent = async (req, res) => {
         description,
         image,
         participants: Number(participants),
-        requirements,
-        organizer,
+        requirements
       },
       { new: true }
     );
