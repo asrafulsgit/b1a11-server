@@ -14,7 +14,7 @@ const createBookEvent = async (req, res) => {
     const isBooked = await BookEvent.findOne({event : id, userEmail : email})
     if(isBooked){
     return res.status(400).send({
-        message: "Event is booked!",
+        message: "Event is already booked!",
         success : false
       });
     }
@@ -50,12 +50,39 @@ const myBookEvents = async (req, res) => {
         success: false,
       });
     }
-    const bookEvents = await BookEvent.find({ userEmail : email }).sort({
+    const bookEvents = await BookEvent.find({ userEmail : email }).populate('event').sort({
       createdAt: -1,
     });
     return res.status(200).send({
       message: "my book events fetched",
       events : bookEvents,
+      success: false,
+    });
+  } catch (error) {
+    return res.status(500).send({
+      message: "Something broke!",
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
+// my bookings
+const bookEventsIds = async (req, res) => {
+  const { email } = req.user;
+  try {
+    if (!email) {
+      return res.status(400).send({
+        message: "Email is required.",
+        success: false,
+      });
+    }
+    const bookEvents = await BookEvent.find({ userEmail : email }).populate('event',"_id");
+    const bookEventsIds = bookEvents.map(book => book.event._id )
+
+    return res.status(200).send({
+      message: "Book events ids fetched",
+      events : bookEventsIds,
       success: false,
     });
   } catch (error) {
@@ -100,7 +127,8 @@ const deleteBookEvent = async (req, res) => {
 module.exports = { 
     createBookEvent,
     myBookEvents,
-    deleteBookEvent
+    deleteBookEvent,
+    bookEventsIds
 };
 
 

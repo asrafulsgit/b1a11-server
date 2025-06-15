@@ -94,6 +94,7 @@ const userLogin = async (req, res) => {
     return res.status(200).send({
       message: "Logged in successfully",
       success: true,
+      user : {name : isExist?.name,email : isExist?.email,avatar : isExist?.avatar}
     })
     } catch (error) {
         return  res.status(500).send({
@@ -138,6 +139,7 @@ const googleLogin = async (req, res) => {
         return res.status(200).send({
           message: "Logged in successfully",
           success: true,
+          user : {name : user.name || name, email : user.email || email, avatar : user.avatar || picture}
         })
   } catch (err) { 
     return res.status(401).json({ 
