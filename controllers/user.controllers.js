@@ -60,7 +60,6 @@ const userRegister = async (req, res) => {
 // login user : email and password
 const userLogin = async (req, res) => {
   const { email, password } = req.body;
-  
     try {
       const isExist = await User.findOne({ email });
     if (!isExist) {
@@ -107,11 +106,9 @@ const userLogin = async (req, res) => {
 // login user : google
 const googleLogin = async (req, res) => {
   const { token } = req.body;
-   console.log(token)
   try {
     const decoded = await admin.auth().verifyIdToken(token);
     const { email, name, picture } = decoded;
-
     let user = await User.findOne({ email });
     if (!user) {
       user = new User({
@@ -182,7 +179,9 @@ const userObserver = async (req, res) => {
       success : false
     })
    }
+   const user = await User.findOne({email})
    return res.status(200).send({
+      user : {name : user?.name,email : user?.email,avatar : user?.avatar},
       message : "Authenticated user!",
       success : true
     })

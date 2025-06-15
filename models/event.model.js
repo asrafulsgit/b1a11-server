@@ -13,7 +13,7 @@ const eventSchema = new mongoose.Schema(
       trim: true,
     },
     date: {
-      type: Date,
+      type: String,
       required: true,
     },
     time: {
@@ -40,6 +40,8 @@ const eventSchema = new mongoose.Schema(
     },
     participants: {
       type: Number,
+      default : 1,
+      min : 1
     },
     requirements: {
       type: String,

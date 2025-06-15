@@ -35,6 +35,7 @@ const createEvent = async (req, res) => {
     requirements,
     organizer,
   } = req.body;
+  console.log(req.body)
   try {
     if (
       !name ||
