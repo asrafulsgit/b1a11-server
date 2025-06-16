@@ -12,7 +12,7 @@ const eventReviewSchema = new mongoose.Schema(
       ref: 'Event',
       required: true,
     },
-    message: {
+    comment: {
       type: String,
       required: true,
       trim: true,
@@ -23,11 +23,15 @@ const eventReviewSchema = new mongoose.Schema(
       min: 1,
       max: 5,
     },
+    date: {
+      type: String,
+      required: true
+    },
   },
   { timestamps: true }
 );
 
-eventReviewSchema.index({ userId: 1, eventId: 1 }, { unique: true });
+eventReviewSchema.index({ user: 1, event: 1 }, { unique: true });
 
 const Review = mongoose.model('Review', eventReviewSchema);
 module.exports = Review;
