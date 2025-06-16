@@ -22,29 +22,6 @@ const profileSchema = new mongoose.Schema({
   },
   dob: {
     type: Date
-  },
-  stats: {
-    eventsPaticipated: {
-      type: Number,
-      default: 0,
-      min: 0
-    },
-    eventsOrganized: {
-      type: Number,
-      default: 0,
-      min: 0
-    },
-    totalParticipants: {
-      type: Number,
-      default: 0,
-      min: 0
-    },
-    avgRating: {
-      type: Number,
-      default: 0,
-      min: 0,
-      max: 5
-    }
   }
 }, {
   timestamps: true

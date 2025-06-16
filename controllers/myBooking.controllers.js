@@ -96,13 +96,41 @@ const cencelBooking = async (req, res) => {
   }
 };
 
+// my bookings
+const myBookingsIds = async (req, res) => {
+  const { email } = req.user;
+  try {
+    if (!email) {
+      return res.status(400).send({
+        message: "Email is required.",
+        success: false,
+      });
+    }
+    const bookings = await MyBooking.find({ userEmail : email }).populate('event',"_id");
+    const bookingsIds = bookings.map(book => book.event._id )
+
+    return res.status(200).send({
+      message: "Book events ids fetched",
+      events : bookingsIds,
+      success: false,
+    });
+  } catch (error) {
+    return res.status(500).send({
+      message: "Something broke!",
+      success: false,
+      error: error.message,
+    });
+  }
+};
+
 
 
 
 module.exports = { 
     createBooking,
     myBookings,
-    cencelBooking
+    cencelBooking,
+    myBookingsIds
 };
 
 
