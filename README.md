@@ -1,20 +1,24 @@
+# ⚙️ AthleticHub Server Documentation
 
-Backend:
+This is the **backend** of the [AthleticHub](#) web application — a sports event management platform. It provides RESTful APIs for user authentication, event management, participant event and reviews.
 
-Node.js
+---
 
-Express.js
+## 🧪 Tech Stack
 
-MongoDB (Mongoose)
+- **Node.js**
+- **Express.js**
+- **MongoDB** with Mongoose
+- **JWT** for authentication
+- **Firebase Admin SDK** for Google Auth
 
-Firebase Admin SDK (for Google Auth)
 
-JWT for auth
+## Key Features
+- **Create user, Login user and Profile**
+- **Manage event** => create, update, delete, read
+- **Bookings event** => create bookings , cencel bookings
+- **Book event** => book event , delete book event
+- **Review event** => post review , delete review
 
-Others:
 
-Nodemailer (for emails)
 
-Multer (if handling images)
-
-Cloudinary/ImageKit (optional for image hosting)
