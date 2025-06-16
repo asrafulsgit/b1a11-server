@@ -21,7 +21,7 @@ const profileSchema = new mongoose.Schema({
     type: String
   },
   dob: {
-    type: Date
+    type: String
   }
 }, {
   timestamps: true
