@@ -312,6 +312,53 @@ const myEvents = async (req, res) => {
   }
 };
 
+
+const filterEventsWithType = async(req,res)=>{
+  const {eventType} = req.query; 
+  try {
+    if(!eventType){
+      return res.status(404).send({ 
+      success: false, 
+      message: 'Event type is required!' 
+    });
+    }
+    const events = await Event.find({type : eventType})
+    return res.status(200).send({ 
+      success: true, 
+      events,
+      message: 'Events filter successfull' 
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({ success: false, message: "Something broke!" });
+  }
+}
+
+
+const searchEvents = async(req,res)=>{ 
+     try {
+       const {search} = req.query;
+       
+       if(!search) {
+        return res.status(404).send({ 
+          success: false, 
+          message: `Please enter event name!` 
+        });
+       }
+  
+       const events = await Event.find({ name : {$regex: search, $options: 'i'} })
+       
+       return res.status(200).send({ 
+         success: true, 
+         events,
+         message: 'Search events successfull' 
+       });
+     } catch (error) {
+       console.error(error);
+       return res.status(500).send({ success: false, message: "Something broke!" });
+     }
+   }
+
 module.exports = {
   createEvent,
   updateEvent,
@@ -320,4 +367,6 @@ module.exports = {
   eventDetails,
   featuredEvents,
   myEvents,
+  filterEventsWithType,
+  searchEvents
 };
