@@ -49,6 +49,7 @@ const createReview = async (req, res) => {
     return res.status(201).send({
       message: "Review successfully posted.",
       success: true,
+      id : newReview?._id
     });
   } catch (error) {
     return res.status(500).send({

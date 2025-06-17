@@ -36,7 +36,6 @@ const userRegister = async (req, res) => {
     }
     
       const hash = await bcrypt.hash(password, 10);
-      console.log(hash)
       const newUser = new User({
         name,
         email,
@@ -82,13 +81,13 @@ const userLogin = async (req, res) => {
         id: isExist._id, email : isExist.email
       },
       process.env.JWT_ACCESS_TOEKN,
-      { expiresIn: "30m" }
+      { expiresIn: "1h" }
     );
     res.cookie("accesstoken", accessToken, {
       httpOnly: true,
       secure: false,
       sameSite: "Strict",
-      maxAge: 1000 * 60 * 30,
+      maxAge: 1000 * 60 * 60,
     });
 
     return res.status(200).send({
@@ -126,14 +125,14 @@ const googleLogin = async (req, res) => {
             id: user._id,  email : user.email
           },
           process.env.JWT_ACCESS_TOEKN,
-          { expiresIn: "30m" }
+          { expiresIn: "1h" }
         );
     
         res.cookie("accesstoken", accessToken, {
           httpOnly: true,
           secure: false,
           sameSite: "Strict",
-          maxAge: 1000 * 60 * 30,
+          maxAge: 1000 * 60 * 60,
         });
     
         return res.status(200).send({

@@ -197,7 +197,7 @@ const updateEvent = async (req, res) => {
 // all events for event page
 const browseEvent = async (req, res) => {
   try {
-    const events = await Event.find().sort({ date: 1 });
+    const events = await Event.find().sort({ createdAt: -1 });
     return res.status(200).send({
       message: "Events fetched",
       events,
@@ -215,7 +215,7 @@ const browseEvent = async (req, res) => {
 // featured events for lading page
 const featuredEvents = async (req, res) => {
   try {
-    const events = await Event.find().sort({ date: 1 }).limit(6);
+    const events = await Event.find().sort({ createdAt: -1 }).limit(6);
     return res.status(200).send({
       message: "Events fetched",
       events,

@@ -68,7 +68,6 @@ const updateProfile = async (req, res) => {
     dob
   } = req.body; 
 
-  console.log(req.body)
   try {
     const profile = await Profile.findOne({user : id});
     if(!profile){
